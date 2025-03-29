@@ -1,0 +1,193 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+const StaffManagementPage: React.FC = () => {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [activeTab, setActiveTab] = useState("all");
+    const router = useRouter();
+
+    // ข้อมูลพนักงานตัวอย่าง
+    const staffs = [
+        {
+            id: 1,
+            staffId: "STF001",
+            name: "สมชาย ใจดี",
+            position: "ผู้จัดการ",
+            department: "การตลาด",
+            email: "somchai@company.com",
+            phoneNumber: "0812345678",
+            status: "Active",
+            joinDate: "01/01/2022"
+        },
+        {
+            id: 2,
+            staffId: "STF002",
+            name: "สมหญิง เก่งดี",
+            position: "พนักงานขาย",
+            department: "ฝ่ายขาย",
+            email: "somying@company.com",
+            phoneNumber: "0823456789",
+            status: "Active",
+            joinDate: "15/03/2022"
+        },
+        {
+            id: 3,
+            staffId: "STF003",
+            name: "สมหมาย ทำงาน",
+            position: "นักบัญชี",
+            department: "การเงิน",
+            email: "sommai@company.com",
+            phoneNumber: "0834567890",
+            status: "Inactive",
+            joinDate: "20/05/2022"
+        }
+    ];
+
+    // กรองพนักงานตามสถานะ
+    const filteredStaffs = staffs.filter(staff => {
+        const matchesSearch = staff.staffId.includes(searchTerm) ||
+            staff.name.includes(searchTerm) ||
+            staff.email.includes(searchTerm) ||
+            staff.phoneNumber.includes(searchTerm);
+        const matchesTab = activeTab === "all" || staff.status === activeTab;
+        return matchesSearch && matchesTab;
+    });
+
+    // ไปหน้าเพิ่มพนักงาน
+    const goToAddStaff = () => {
+        router.push("/admin/staff-management/add");
+    };
+
+    // ไปหน้าแก้ไขพนักงาน
+    const goToEditStaff = (staffId: string) => {
+        router.push(`/admin/staff-management/edit?id=${staffId}`);
+    };
+
+    return (
+        <div className="pt-20 min-h-screen bg-gray-50 p-6">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">การจัดการพนักงาน</h1>
+                <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                    <Link href="/admin">
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                            ย้อนกลับ
+                        </button>
+                    </Link>
+                    <button
+                        onClick={goToAddStaff}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    >
+                        เพิ่มพนักงาน
+                    </button>
+                </div>
+            </div>
+
+            {/* Search and Filter */}
+            <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+                <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+                    <input
+                        type="text"
+                        placeholder="ค้นหาจากรหัสพนักงาน, ชื่อ, อีเมล, เบอร์โทร..."
+                        className="p-2 border rounded-lg md:w-96"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+                        <button
+                            onClick={() => setActiveTab("all")}
+                            className={`px-4 py-2 rounded-lg whitespace-nowrap ${activeTab === "all" ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+                        >
+                            ทั้งหมด
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("Active")}
+                            className={`px-4 py-2 rounded-lg whitespace-nowrap ${activeTab === "Active" ? 'bg-green-600 text-white' : 'bg-gray-200'}`}
+                        >
+                            Active
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("Inactive")}
+                            className={`px-4 py-2 rounded-lg whitespace-nowrap ${activeTab === "Inactive" ? 'bg-red-600 text-white' : 'bg-gray-200'}`}
+                        >
+                            Inactive
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Staff List */}
+            <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="grid grid-cols-12 bg-gray-100 p-4 font-semibold text-gray-700">
+                    <div className="col-span-1">รหัสพนักงาน</div>
+                    <div className="col-span-2">ชื่อ-สกุล</div>
+                    <div className="col-span-1">ตำแหน่ง</div>
+                    <div className="col-span-1">แผนก</div>
+                    <div className="col-span-2">อีเมล</div>
+                    <div className="col-span-1">เบอร์โทร</div>
+                    <div className="col-span-1">สถานะ</div>
+                    <div className="col-span-2">วันที่เริ่มงาน</div>
+                    <div className="col-span-1">การจัดการ</div>
+                </div>
+
+                {filteredStaffs.length > 0 ? (
+                    filteredStaffs.map((staff) => (
+                        <div key={staff.id} className="grid grid-cols-12 p-4 border-b hover:bg-gray-50">
+                            <div className="col-span-1 font-medium truncate">{staff.staffId}</div>
+                            <div className="col-span-2 truncate">{staff.name}</div>
+                            <div className="col-span-1 truncate">{staff.position}</div>
+                            <div className="col-span-1 truncate">{staff.department}</div>
+                            <div className="col-span-2 truncate">
+                                <span className="inline-block min-w-0 max-w-full overflow-hidden text-ellipsis">
+                                    {staff.email}
+                                </span>
+                            </div>
+                            <div className="col-span-1 truncate">{staff.phoneNumber}</div>
+                            <div className="col-span-1">
+                                <span className={`px-2 py-1 rounded-full text-xs ${staff.status === "Active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                                    {staff.status}
+                                </span>
+                            </div>
+                            <div className="col-span-2 truncate">{staff.joinDate}</div>
+                            <div className="col-span-1 flex gap-2">
+                                <button
+                                    onClick={() => goToEditStaff(staff.staffId)}
+                                    className="text-blue-600 hover:text-blue-800"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                    </svg>
+                                </button>
+                                <button className="text-red-600 hover:text-red-800">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="p-8 text-center text-gray-500">
+                        ไม่พบข้อมูลพนักงานที่ค้นหา
+                    </div>
+                )}
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-center mt-6">
+                <div className="flex gap-2">
+                    <button className="px-4 py-2 bg-gray-200 rounded-lg">ย้อนกลับ</button>
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">1</button>
+                    <button className="px-4 py-2 bg-gray-200 rounded-lg">2</button>
+                    <button className="px-4 py-2 bg-gray-200 rounded-lg">3</button>
+                    <button className="px-4 py-2 bg-gray-200 rounded-lg">ถัดไป</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default StaffManagementPage;

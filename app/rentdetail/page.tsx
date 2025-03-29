@@ -183,7 +183,7 @@ export default function CarDetails() {
                 <span className="text-blue-900">
                     ราคาทั้งหมด: <span className="font-bold text-blue-700">฿{grandTotal.toLocaleString()}</span>
                 </span>
-                <Link href="/paymentdetail">
+                
                     <button
                         className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-lg px-6 py-3 shadow-md transition-all"
                         onClick={handleRentClick}
@@ -191,7 +191,7 @@ export default function CarDetails() {
                     >
                         {isLoading ? "กำลังโหลด..." : "เช่ารถคันนี้"}
                     </button>
-                </Link>
+                
             </div>
         </div>
     );

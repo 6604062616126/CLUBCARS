@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import './globals.css';
+import { mysqlPool } from "@/utils/db";
 
-const Signup = () => {
+const signin = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
@@ -15,7 +16,7 @@ const Signup = () => {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
@@ -26,12 +27,42 @@ const Signup = () => {
 
         setLoading(true);
 
-        setTimeout(() => {
-            sessionStorage.setItem("user", JSON.stringify({ firstName, lastName, username, phone }));
+        //setTimeout(() => {
+           // sessionStorage.setItem("user", JSON.stringify({ firstName, lastName, username, phone }));
+            //setLoading(false);
+            //alert("สมัครสมาชิกสำเร็จ!");
+            //router.push("/signin");
+        //}, 1500);
+
+        try {
+            const response = await fetch("/api/signin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    username,
+                    phone,
+                    password,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.status === 200) {
+                alert(data.message); // แสดงข้อความสมัครสมาชิกสำเร็จ
+                router.push("/signin"); // เปลี่ยนเส้นทางไปที่หน้าล็อกอิน
+            } else {
+                setError(data.message); // แสดงข้อความผิดพลาด
+            }
+        } catch (err) {
+            setError("ล้มเหลวในการสมัครสมาชิกxx");
+            console.error("Error during signup:", err);
+        } finally {
             setLoading(false);
-            alert("✅ สมัครสมาชิกสำเร็จ!");
-            router.push("/signin");
-        }, 1500);
+        }
     };
 
     return (
@@ -121,4 +152,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default signin;

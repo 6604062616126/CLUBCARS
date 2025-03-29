@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaFacebook, FaApple, FaGoogle } from "react-icons/fa";
-import Link from "next/link"; 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import '../login/globals.css';
 
 const Login = () => {
@@ -9,8 +10,17 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);  // ใช้ตัวแปรนี้เพื่อให้มั่นใจว่า useRouter ใช้ได้ในฝั่งไคลเอนต์
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();  // ใช้ router เพื่อนำทางหลังจากเข้าสู่ระบบ
+
+  // ตรวจสอบว่ากำลังทำงานในฝั่งไคลเอนต์
+  useEffect(() => {
+    setIsClient(true);  // เมื่อเป็นฝั่งไคลเอนต์, จะตั้งค่า isClient เป็น true
+  }, []);
+
+  // แก้ไขฟังก์ชัน handleSubmit ให้เป็น async
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -20,17 +30,37 @@ const Login = () => {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      sessionStorage.setItem("user", JSON.stringify({ phone, password }));
-      setLoading(false);
-      alert("เข้าสู่ระบบสำเร็จ!");
-    }, 1500);
+
+    // ส่งข้อมูล login ไปที่ API
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ phone, password }),
+    });
+
+    const data = await res.json();
+
+    if (res.status === 200) {
+      alert(data.message);
+      router.push("/");  
+    } else {
+      // ถ้ามีข้อผิดพลาด แสดงข้อความ
+      setError(data.message);
+    }
+
+    setLoading(false);  
   };
 
   const handleSocialLogin = (provider: string) => {
     alert(`เปิดหน้าต่างล็อคอิน ${provider}`);
     // ที่นี่สามารถใช้ OAuth หรือ Firebase Authentication เพื่อเข้าสู่ระบบจริง
   };
+
+  if (!isClient) {
+    return null;  // ไม่ให้เรนเดอร์คอมโพเนนต์จนกว่าจะอยู่ในฝั่งไคลเอนต์
+  }
 
   return (
     <div className="full-screen-background">

@@ -51,23 +51,30 @@ export default function PaymentForm() {
                 <button className="w-full bg-blue-600 text-white py-2 mt-4 rounded">ยืนยันข้อมูล</button>
             </div>
 
-            <div className="w-[35%] bg-white p-6 rounded-2xl shadow-lg">
+            <div className="w-[50%] bg-white p-6 rounded-2xl shadow-lg min-h-[800px]">
               <h3 className="text-xl font-bold mb-2">สรุปข้อมูลการเช่ารถ</h3>
-              <p className="text-sm text-gray-300 mb-4 ">___________________________________</p>
-              <div className="w-full h-40 bg-gray-300 rounded-lg mb-4 flex items-center justify-center text-gray-600 ">รูปภาพรถ</div>
+              <p className="text-sm text-gray-300 mb-4">___________________________________</p>
+              <div className="w-full h-40 bg-gray-300 rounded-lg mb-4 flex items-center justify-center text-gray-600">
+                รูปภาพรถ
+              </div>
               <p className="font-semibold">Mercedes-AMG C 43 Coupe 2</p>
-              <p className="text-sm text-gray-300 mb-4 ">___________________________________</p>
-              <p className="text-gray-500 ">จุดรับรถ-จุดคืนรถ:</p>
-              <p className="text-black font-bold  ">สนามบินดอนเมือง</p>
-              <p className="text-gray-500 mt-3 ">ระบบเกียร์</p>
-              <p className="text-black font-bold ">เกียร์ออโต้</p>
-              <p className="text-sm text-gray-300 mb-4 ">___________________________________</p>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '25vh' }}>
+              <p className="text-sm text-gray-300 mb-4">___________________________________</p>
+              <p className="text-gray-500">จุดรับรถ-จุดคืนรถ:</p>
+                <p className="text-black font-bold">สนามบินดอนเมือง</p>
+              <p className="text-gray-500 mt-3">ระบบเกียร์</p>
+              <p className="text-black font-bold">เกียร์ออโต้</p>
+              <p className="text-sm text-gray-300 mb-4">___________________________________</p>
+              <div className="flex flex-col justify-center items-center h-[30vh]">
                 <p className="text-gray-500 mt-1">วัน-เวลารับรถ</p>
                 <p className="text-black font-semibold">29/03/2025 - 11:30 น.</p>
                 <p className="text-gray-500 font-semibold mt-9">3 วัน</p>
                 <p className="text-gray-500 mt-9">วัน-เวลาคืนรถ</p>
                 <p className="text-black font-semibold">31/03/2025 - 12:00 น.</p>
+                <img src="/QR code.png" alt="QR Code" className="w-24 h-24 mt-4" />
+                <label className="mt-4 w-32 h-28 bg-blue-600 text-white text-center flex items-center justify-center rounded-lg cursor-pointer text-lg">
+                  แนบไฟล์
+                  <input type="file" className="hidden" />
+                </label>
               </div>
             </div>
           </div>

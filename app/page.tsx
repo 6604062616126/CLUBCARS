@@ -4,8 +4,11 @@ import React from "react";
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 
 export default function Home() {
+  const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(null); 
   const terms = [
     {
@@ -163,6 +166,17 @@ export default function Home() {
                 <li>❌ ค่ารับส่งนอกสถานที่</li>
               </ul>
             </div>
+
+            {/* ปุ่มเทสเฉยๆ */}
+            <div className="mt-6">
+              <Link href="/admin">
+                <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+                  Admin Test
+                </button>
+              </Link>
+            </div>
+
+
           </div>
         </div>
       </section>

@@ -22,10 +22,10 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-white p-4 shadow-md fixed w-full top-0 z-50">
+        <nav className="bg-white 600 p-4 shadow -md fixed w-full top-0 z-50">
             <div className="container mx-auto flex justify-between items-center">
-                <Link href="/" className="text-black text-xl font-bold">
-                    <img src="/logo.png" alt="CLUBCARS" className="h-8 w-auto" />
+                <Link href="/" className="text-white text-xl font-bold">
+                    <img src="/logo.png" alt="CLUBCARS" className="h-10" />
                 </Link>
 
                 {/* Desktop Menu */}
@@ -45,17 +45,16 @@ const Navbar = () => {
                     <h2 className="text-black">092-623-1151</h2>
 
                     {!isLoggedIn ? (
-                        <button
+                        <button classname="bg-blue"
                             onClick={() => {
                                 router.prefetch("/signin");
                                 router.push("/signin");
                             }}
-                            className="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 transition"
-                        >
+                            className="bg-gray text-black-600 px-4 py-2 rounded-md hover:bg-gray-200 transition">
                             สมัครสมาชิก / ลงชื่อเข้าใช้
                         </button>
                     ) : (
-                        <button onClick={handleLogout} className="text-black hover:underline">
+                        <button onClick={handleLogout} className="text-white hover:underline">
                             ออกจากระบบ
                         </button>
                     )}
@@ -63,7 +62,7 @@ const Navbar = () => {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden text-black"
+                    className="md:hidden text-white"
                     onClick={() => setIsOpen(!isOpen)}
                     aria-label="Toggle Menu"
                 >
